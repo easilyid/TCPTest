@@ -1,0 +1,8 @@
+﻿//规则一 版本号 决定了proto文档的版本号
+syntax = "proto3";
+//规则二 package 决定了生成的文件的命名空间
+package easily.Message;
+
+message easiltTest{
+    int32 time=1;
+}

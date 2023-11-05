@@ -1,0 +1,86 @@
+//规则一 版本号 决定了proto文档的版本号
+syntax = "proto3";
+//规则二 package 决定了生成的文件的命名空间
+package Heart.Message;
+
+//import "Assets/Scripts/Protocol/test2.proto";
+
+//规则三 option csharp_namespace 决定了生成的C#文件的命名空间
+option csharp_namespace = "Heart.Message";
+//规则四 option cc_enable_arenas = true; 决定了生成的C++文件是否启用arena内存管理
+option cc_enable_arenas = true;
+
+//规则五 注释 // /* */
+//规则六 message 决定了生成的类
+
+////////////////////////////////////////////////////////////////
+//
+//  Basic Defines
+//
+////////////////////////////////////////////////////////////////
+
+
+message TestMsg{
+    //规则七 成员类型 和 唯一编号
+    float a = 1;
+    int32 b = 2; //变长编码 1-5字节 int32 int64  无符号 uint32 uint64  存负数 sint32 sint64 bool enum
+    int64 c = 3; //C# long
+    string d = 4; 
+    bool e = 5;
+    // 固定字节 4字节 fixed32 fixed64 sfixed32 sfixed64
+    fixed32 testFixed32 = 6; //C# -uint 它通常用来表示大于2的28次方的数 ，比uint32更有效 始终是4个字节
+    fixed64 testFixed64 = 7; //C# -ulong 它通常用来表示大于2的56次方的数 ，比uint64更有效 始终是8个字节
+
+    sfixed32 testSFixed32 = 8; //C# - int 始终4个字节
+    sfixed64 testSFixed64 = 9; //C# - long 始终8个字节
+    //其他类型
+    bytes testBytes = 10; //C# - BytesString 字节字符串
+    
+    //规则八 特殊标识
+    //required 表示必须赋值的字段
+    //required float testRequired = 14;
+    //optional 表示可选字段
+    optional int32 testOptional = 11;
+    //repeated 表示数组 List
+    repeated int32 f = 12;
+    //map 表示字典 Dictionary
+    map<int32, string> g = 13;
+    //oneof 表示互斥
+    oneof testOneof{
+        int32 h = 14;
+        string i = 15;
+    }
+}
+//规则九 枚举
+enum TestEnum{
+    TESTENUM1 = 0;//第一个枚举值必须默认为0
+    TESTENUM2 = 1;
+    TESTENUM3 = 2;
+}
+//规则十 默认值
+//int32 testDefault = 16 [default = 100];
+
+message TestMsg2{
+    //规则十一 嵌套  默认为null 使用时需要new
+    TestMsg testMsg = 1;
+    //规则十二 引用
+    TestEnum testEnum = 2;
+    //规则十三 引用
+    TestMsg2 testMsg2 = 3;
+    
+    //规则十四 重命名
+    //TestMsg testMsg = 1 [(nanopb_msgopt).msgtype = "TestMsg"];
+    //规则十五 占用
+    reserved 22;//告诉编译器 22这个编号不能使用被占用了
+    
+    //规则十六 导入定义
+    //import "配置文件路径"; 能通过import导入其他proto文件
+    //import "Assets/Scripts/Protocol/test2.proto";
+    //easily.Message.easiltTest testMsg2 = 4;
+}
+
+message TestMsg3{
+    TestMsg2 testMsg2 = 1;
+    TestMsg3 testMsg3 = 2;
+ 
+}
